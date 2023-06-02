@@ -19,6 +19,13 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
+        //Form Validation
+        $request->validate([
+            'name' => 'required',
+            'description' => 'required',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:24574',
+        ]);
+
         //Enteries Upload
         $imageName = time().'.'.$request->image->extension();
         $request->image->move(public_path('product'), $imageName);
@@ -27,6 +34,7 @@ class ProductController extends Controller
         $product->description = $request->description;
         $product->image = $imageName;
         $product->save();
-        return redirect()->route('product.index');
+        // return redirect()->route('product.index');
+        return back()->withSuccess('Product Added Successfully');
     }
 }

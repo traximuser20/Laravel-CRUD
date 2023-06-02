@@ -6,8 +6,8 @@
         @vite('resources/css/app.css')
         <title>Laravel CRUD</title>
     </head>
-    <body>
-        <nav class="shadow-2xl rounded-md">
+    <body class="bg-gray-50">
+        <nav class="shadow-xl rounded-md">
             <div
                 class="relative px-4 py-4 flex justify-between items-center bg-white"
             >
@@ -248,6 +248,19 @@
                 </div>
             </div>
         </nav>
+        
+        @if($message = Session::get('success'))
+        <div class="container my-4 px-auto py-auto w-full h-16" role="alert">
+            <div class="mx-auto text-white rounded-lg shadow-xl bg-green-300 w-64 h-10 border-green-500">
+                <div class="justify-center flex py-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
+                    </svg>
+                    <p class="px-1">{{ $message }}</p>
+                </div>
+            </div>
+        </div>
+        @endif
 
         <script>
             // Burger menus
@@ -293,12 +306,12 @@
         </script>
         
         <section>
-        <div class="container mx-auto my-auto w-full h-full">
-            <div class="mt-20 mb-20 place-self-center flex-row w-full lg:w-1/2 xl:w-5/12 px-4">
+        <div class="container w-full h-full my-20">
+            <div class="mx-auto items-center flex-row w-full lg:w-1/2 xl:w-5/12">
                 <div class="bg-white relative rounded-lg p-8 sm:p-12 shadow-lg">
                     <form method="POST" action="/product/store" enctype="multipart/form-data">
                         @csrf <!-- {{ csrf_field() }} -->
-                        <div class="mb-5">
+                        <div class="mb-5 form-control">
                             <label
                                 for="email"
                                 class="mb-5 block text-xl font-semibold text-[#07074D]"
@@ -307,11 +320,15 @@
                             </label>
                             <input
                                 required
+                                value="{{ old('name') }}"
                                 type="text"
                                 name="name"
                                 placeholder="Product Title"
                                 class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                             />
+                            @if($errors->has('name'))
+                                <span class="text-red-500">{{ $errors->first('name') }}</span>
+                            @endif
                         </div>
                         <div class="mb-6">
                             <label
@@ -322,11 +339,15 @@
                             </label>
                             <textarea
                                 required
+                                value="{{ old('description') }}"
                                 name="description"
                                 rows="6"
                                 placeholder="Product Description"
                                 class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                             ></textarea>
+                            @if($errors->has('description'))
+                                <span class="text-red-500">{{ $errors->first('description') }}</span>
+                            @endif
                         </div>
                         <div class="mb-6">
                             <label
@@ -337,6 +358,8 @@
 
                             <div class="mb-8">
                                 <input
+                                    required
+                                    value="{{ old('image') }}"
                                     type="file"
                                     name="image"
                                     id="file"
@@ -364,6 +387,9 @@
                                         </span>
                                     </div>
                                 </label>
+                                @if($errors->has('image'))
+                                    <span class="text-red-500">{{ $errors->first('image') }}</span>
+                                @endif
                             </div>
 
                             <!-- <div class="mb-5 rounded-md bg-[#F5F7FB] py-4 px-8">
